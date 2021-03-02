@@ -5,15 +5,16 @@ import {
 	Index,
 	JoinColumn,
 	ManyToOne,
+	OneToMany,
 } from "typeorm";
 
 import Entity from "./Entity";
 import User from "./User";
 import { makeId, slugify } from "../helpers/helpers";
-import { Sub } from "./Sub";
+import Sub from "./Sub";
 import Comment from "./Comment";
 @TOEntity("posts")
-export class Post extends Entity {
+export default class Post extends Entity {
 	constructor(post: Partial<Post>) {
 		super();
 		Object.assign(this, post);
@@ -44,7 +45,7 @@ export class Post extends Entity {
 	@JoinColumn({ name: "subName", referencedColumnName: "name" })
 	sub: Sub;
 
-	@ManyToOne(() => Comment, (comment) => comment.post)
+	@OneToMany(() => Comment, (comment) => comment.post)
 	comments: Comment[];
 
 	@BeforeInsert()
