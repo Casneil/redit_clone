@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 import cookie from "cookie";
 import dotenv from "dotenv";
 
-import { User } from "../entities/User";
+import User from "../entities/User";
 //Middleware
 import auth from "../middleware/auth";
 
