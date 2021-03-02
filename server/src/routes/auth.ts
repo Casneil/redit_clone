@@ -9,6 +9,7 @@ import dotenv from "dotenv";
 import User from "../entities/User";
 //Middleware
 import auth from "../middleware/auth";
+import { mapErrors } from "../helpers/helpers";
 
 dotenv.config();
 
@@ -30,7 +31,9 @@ const register = async (req: Request, res: Response) => {
     // Create user
     const user = new User({ email, username, password });
     errors = await validate(user);
-    if (errors.length > 0) return res.status(400).json({ errors });
+    if (errors.length > 0) {
+      return res.status(400).json(mapErrors(errors));
+    }
     await user.save();
     // Return the user
     return res.json(user);
@@ -51,7 +54,7 @@ const login = async (req: Request, res: Response) => {
     }
 
     const user = await User.findOne({ username });
-    if (!user) return res.status(404).json({ error: "User not found" });
+    if (!user) return res.status(404).json({ username: "User not found" });
 
     const passwordMatches = await bcrypt.compare(password, user.password);
 

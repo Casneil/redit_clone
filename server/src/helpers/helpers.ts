@@ -9,7 +9,7 @@ export function makeId(length: number): string {
   return result;
 }
 
-export function slugify(str: string): string {
+export const slugify = (str: string): string => {
   str = str.trim();
   str = str.toLowerCase();
 
@@ -28,4 +28,11 @@ export function slugify(str: string): string {
     .replace(/^-+/, "") // trim - from start of text
     .replace(/-+$/, "") // trim - from end of text
     .replace(/-/g, "_");
-}
+};
+
+export const mapErrors = (errors: Object[]) => {
+  return errors.reduce((prev: any, error: any) => {
+    prev[error.property] = Object.entries(error.constraints)[0][1];
+    return prev;
+  }, {});
+};
