@@ -9,7 +9,7 @@ export default function Home() {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<div
-				className="w-40 h-screen bg-center bg-cover"
+				className="h-screen bg-center bg-cover w-36"
 				style={{ backgroundImage: "url('/images/bg_image.png')" }}
 			></div>
 			<div className="flex flex-col justify-center pl-6">
