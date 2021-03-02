@@ -4,6 +4,7 @@ import express, { Response } from "express";
 import morgan from "morgan";
 
 import authRoutes from "./routes/auth";
+//Middleware
 import trim from "./middleware/trim";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
