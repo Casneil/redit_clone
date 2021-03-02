@@ -26,12 +26,12 @@ app.use("/api/posts", postsRoutes);
 app.use("/api/subs", subRoutes);
 
 app.listen(process.env.PORT, async () => {
-	console.log(`Running at http:localhost:${process.env.PORT}`);
+  console.log(`Running at http:localhost:${process.env.PORT}`);
 
-	try {
-		await createConnection();
-		console.log("database connected");
-	} catch (error) {
-		console.log(error);
-	}
+  try {
+    await createConnection();
+    console.log("database connected");
+  } catch (error) {
+    console.log(error);
+  }
 });

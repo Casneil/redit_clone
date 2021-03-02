@@ -16,7 +16,9 @@ export default function Home() {
         <div className="w-70">
           <h1 className="mb-2 text-lg font-medium">Sign Up</h1>
           <p className="mb-10 text-xs">
-            By continuing you agree to our User Agreement and Privacy Policy
+            By continuing you agree to our{" "}
+            <span className="text-xs text-blue-500 text">User Agreement</span>{" "}
+            and <span className="text-blue-500 text xs">Privacy Policy</span>
           </p>
           <form>
             <div className="mb-6">
@@ -32,25 +34,25 @@ export default function Home() {
             <div className="mb-2">
               <input
                 type="email"
-                className="w-full px-3 py-2 border rounded bg-grey-100 border-grey-400"
+                className="w-full p-3 py-2 transition duration-200 border rounded outline-none bg-gray-50 bg-grey-100 border-grey-300 focus:bg-white hover:bg-white"
                 placeholder="Email"
               />
             </div>
             <div className="mb-2">
               <input
                 type="text"
-                className="w-full px-3 py-2 border rounded bg-grey-100 border-grey-400"
+                className="w-full p-3 py-2 transition duration-200 border rounded outline-none bg-gray-50 bg-grey-100 border-grey-300 focus:bg-white hover:bg-white"
                 placeholder="Username"
               />
             </div>
             <div className="mb-2">
               <input
                 type="password"
-                className="w-full px-3 py-2 border rounded bg-grey-100 border-grey-400"
+                className="w-full p-3 py-2 transition duration-200 border rounded outline-none bg-gray-50 bg-grey-100 border-grey-300 focus:bg-white hover:bg-white"
                 placeholder="Password"
               />
             </div>
-            <button className="w-full py-2 mb-4 text-xs font-bold text-white uppercase bg-blue-500 border border-blue-500 rounded">
+            <button className="w-full py-2 mb-4 text-xs font-bold text-white uppercase transition duration-200 bg-blue-500 border border-blue-500 rounded">
               Sign Up
             </button>
           </form>
