@@ -4,9 +4,11 @@ import { validate, isEmpty } from "class-validator";
 const bcrypt = require("bcrypt");
 import jwt from "jsonwebtoken";
 import cookie from "cookie";
+import dotenv from "dotenv";
 
 import { User } from "../entities/User";
-import { strict } from "assert";
+
+dotenv.config();
 
 const register = async (req: Request, res: Response) => {
 	const { email, username, password } = req.body;
@@ -54,26 +56,44 @@ const login = async (req: Request, res: Response) => {
 		if (!passwordMatches)
 			return res.status(401).json({ password: "Incorrect password" });
 
-		const token = jwt.sign({ username }, "37uisjdbkbs789oiqwjnlksnkajb");
+		const token = jwt.sign({ username }, process.env.JWT_SECRET);
 
 		//Set cookie
 		res.set(
 			"Set-Cookie",
 			cookie.serialize("token", token, {
 				httpOnly: true,
-				secure: false,
+				secure: process.env.NODE_ENV === "production",
 				sameSite: "strict",
 				maxAge: 3600,
 				path: "/",
 			})
 		);
 
-		return res.json({ user, token });
+		return res.json(user);
 	} catch (error) {}
+};
+
+const me = async (req: Request, res: Response) => {
+	try {
+		const token = req.cookies.token;
+		if (!token) throw new Error("Unauthenticated");
+
+		const { username }: any = jwt.verify(token, process.env.JWT_SECRET);
+		const user = await User.findOne({ username });
+
+		if (!user) throw new Error("Unauthenticated");
+
+		return res.json(user);
+	} catch (error) {
+		console.log(error);
+		return res.status(401).json({ error: "Unauthenticated" });
+	}
 };
 
 const router = Router();
 router.post("/register", register);
 router.post("/login", login);
+router.get("/me", me);
 
 export default router;
