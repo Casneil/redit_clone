@@ -4,6 +4,8 @@ import express, { Response } from "express";
 import morgan from "morgan";
 
 import authRoutes from "./routes/auth";
+import postsRoutes from "./routes/posts";
+import subRoutes from "./routes/subs";
 //Middleware
 import trim from "./middleware/trim";
 import dotenv from "dotenv";
@@ -20,6 +22,8 @@ app.use(cookieParser());
 app.get("/", (_, res: Response) => res.send("Hello World"));
 
 app.use("/api/auth", authRoutes);
+app.use("/api/posts", postsRoutes);
+app.use("/api/subs", subRoutes);
 
 app.listen(process.env.PORT, async () => {
 	console.log(`Running at http:localhost:${process.env.PORT}`);

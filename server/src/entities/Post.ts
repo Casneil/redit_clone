@@ -1,7 +1,16 @@
-import { Column, Entity as TOEntity, Index } from "typeorm";
-const bcrypt = require("bcrypt");
+import {
+	BeforeInsert,
+	Column,
+	Entity as TOEntity,
+	Index,
+	JoinColumn,
+	ManyToOne,
+} from "typeorm";
 
 import Entity from "./Entity";
+import User from "./User";
+import { makeId, slugify } from "../helpers/helpers";
+import { Sub } from "./Sub";
 @TOEntity("posts")
 export class Post extends Entity {
 	constructor(post: Partial<Post>) {
@@ -9,19 +18,34 @@ export class Post extends Entity {
 		Object.assign(this, post);
 	}
 
-  @Index()
+	@Index()
 	@Column()
 	identifier: string; // 7 character id
 
 	@Column()
 	title: string;
 
-  @Index()
+	@Index()
 	@Column()
-	slud: string;
+	slug: string;
 
-  @Column({nullable: true, type: "text"})
-  body: string;
+	@Column({ nullable: true, type: "text" })
+	body: string;
 
+	@Column()
+	subName: string;
 
+	@ManyToOne(() => User, (user) => user.posts)
+	@JoinColumn({ name: "username", referencedColumnName: "username" })
+	user: User;
+
+	@ManyToOne(() => Sub, (sub) => sub.posts)
+	@JoinColumn({ name: "subName", referencedColumnName: "name" })
+	sub: Sub;
+
+	@BeforeInsert()
+	makeIdAndSlug() {
+		this.identifier = makeId(7);
+		this.slug = slugify(this.title);
+	}
 }
