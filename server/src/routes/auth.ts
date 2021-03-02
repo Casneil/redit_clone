@@ -8,9 +8,17 @@ const register = async (req: Request, res: Response) => {
 
 	try {
 		// TODO: Validata data
+		let errors: any = {};
+		const emailUser = User.findOne({ email });
+		const usernameUser = User.findOne({ username });
+		if (emailUser) errors.email = "Email already taken";
+		if (usernameUser) errors.username = "Username already taken";
+    if(Object.keys(errors.length > 0){
+      return res.status(400).json(errors)
+    }
 		// TODO: Create user
 		const user = new User({ email, username, password });
-		const errors = await validate(user);
+		errors = await validate(user);
 		if (errors.length > 0) return res.status(400).json({ errors });
 		await user.save();
 		// TODO: Return the user
