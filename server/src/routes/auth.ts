@@ -58,7 +58,7 @@ const login = async (req: Request, res: Response) => {
 		if (!passwordMatches)
 			return res.status(401).json({ password: "Incorrect password" });
 
-		const token = jwt.sign({ username }, process.env.JWT_SECRET);
+		const token = jwt.sign({ username }, process.env.JWT_SECRET!);
 
 		//Set cookie
 		res.set(
@@ -73,14 +73,17 @@ const login = async (req: Request, res: Response) => {
 		);
 
 		return res.json(user);
-	} catch (error) {}
+	} catch (error) {
+		console.log(error);
+		return res.json({ error: "Something went wrong" });
+	}
 };
 
-const me = (_, res: Response) => {
+const me = (_: Request, res: Response) => {
 	return res.json(res.locals.user);
 };
 
-const logout = (_, res: Response) => {
+const logout = (_: Request, res: Response) => {
 	res.set(
 		"Set-Cookie",
 		cookie.serialize("token", "", {
