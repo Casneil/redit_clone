@@ -8,8 +8,10 @@ const Sub = () => {
   const router = useRouter();
   const subName = router.query.sub;
 
-  const { data: sub } = useSWR(subName ? `/subs/${subName}` : null);
+  const { data: sub, error } = useSWR(subName ? `/subs/${subName}` : null);
   let postMarkup;
+  if (error) router.push("/");
+
   if (!sub) {
     postMarkup = <p className="text-lg text-center">Loading...</p>;
   } else if (sub.posts.length === 0) {
