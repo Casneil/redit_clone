@@ -10,9 +10,12 @@ export interface IInputGroupProps {
 export interface IPosts {
   identifier: string;
   title: string;
-  body: string;
+  body?: string;
   subName: string;
   slug: string;
+  username: string;
   createdAt: string;
   updatedAt: string;
+  // Virtual fields
+  url: string;
 }
