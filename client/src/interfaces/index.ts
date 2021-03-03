@@ -22,3 +22,20 @@ export interface IPosts {
   commentCount?: number;
   userVote?: number;
 }
+
+export interface IUser {
+  username: string;
+  email: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IState {
+  authenticated: boolean;
+  user: IUser | undefined;
+}
+
+export interface IAction {
+  type: string;
+  payload: any;
+}
