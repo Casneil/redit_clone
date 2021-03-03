@@ -7,7 +7,7 @@ export interface IInputGroupProps {
   setValue: (string: string) => void;
 }
 
-export interface IPosts {
+export interface IPost {
   identifier: string;
   title: string;
   body?: string;
@@ -39,4 +39,20 @@ export interface IState {
 export interface IAction {
   type: string;
   payload: any;
+}
+
+export interface ISub {
+  title: string;
+  name: string;
+  slug: string;
+  description: string;
+  imageUrn: string;
+  bannerUrn: string;
+  username: string;
+  posts: IPost[];
+  createdAt: string;
+  updatedAt: string;
+  // Virtual fields
+  imageUrl: string;
+  bannerUrl: string;
 }

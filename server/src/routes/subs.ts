@@ -117,11 +117,11 @@ const uploadSubImage = async (req: Request, res: Response) => {
     let oldImageUrn: string = "";
 
     if (type === "image") {
-      sub.imageUrn = req.file.filename;
       oldImageUrn = sub.imageUrn || "";
+      sub.imageUrn = req.file.filename;
     } else if (type === "banner") {
-      sub.bannerUrn = req.file.filename;
       oldImageUrn = sub.bannerUrn || "";
+      sub.bannerUrn = req.file.filename;
     }
 
     await sub.save();

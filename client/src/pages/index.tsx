@@ -4,7 +4,7 @@ import Head from "next/head";
 
 import PostCard from "../components/PostCard";
 //Interfaces
-import { IPosts } from "../interfaces";
+import { IPost } from "../interfaces";
 
 const Home = () => {
   const { data: posts } = useSWR("/posts");
@@ -17,7 +17,7 @@ const Home = () => {
       <div className="container flex pt-4">
         {/* Posts feeds */}
         <div className="w-160">
-          {posts?.map((post: IPosts) => (
+          {posts?.map((post: IPost) => (
             <PostCard post={post} key={post.identifier} />
           ))}
         </div>

@@ -7,10 +7,10 @@ import Axios from "axios";
 import classNames from "classnames";
 
 // Interfaces
-import { IPosts } from "../interfaces";
+import { IPost } from "../interfaces";
 
 type PostCardTypes = {
-  post: IPosts;
+  post: IPost;
 };
 
 const ActionButtom = ({ children }) => {
