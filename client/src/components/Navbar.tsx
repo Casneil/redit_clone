@@ -9,13 +9,13 @@ import { REDUCER_ENUM } from "../emums";
 import ReaditLogo from "../../public/images/logo.svg";
 
 const Navbar: React.FC = () => {
-  const { authenticated } = useAuthState();
+  const { authenticated, loading } = useAuthState();
   const dispatch = useAuthDispatch();
 
   const logout = () => {
     Axios.get("/auth/logout")
       .then((_) => {
-        dispatch({ type: REDUCER_ENUM.LOGOUT });
+        dispatch(REDUCER_ENUM.LOGOUT);
         window.location.reload();
       })
       .catch((error) => console.log(error));
@@ -45,27 +45,28 @@ const Navbar: React.FC = () => {
       {/* Auth buttons */}
 
       <div className="flex">
-        {authenticated ? (
-          <Fragment>
-            <button
-              className="w-32 py-1 mr-4 leading-5 hallow blue button"
-              onClick={logout}
-            >
-              Log Out
-            </button>
-          </Fragment>
-        ) : (
-          <Fragment>
-            <Link href="/login">
-              <a className="w-32 py-1 mr-4 leading-5 hallow blue button">
-                Log in
-              </a>
-            </Link>
-            <Link href="/register">
-              <a className="w-32 py-1 leading-5 blue button">Sign Up</a>
-            </Link>
-          </Fragment>
-        )}
+        {!loading &&
+          (authenticated ? (
+            <Fragment>
+              <button
+                className="w-32 py-1 mr-4 leading-5 hallow blue button"
+                onClick={logout}
+              >
+                Log Out
+              </button>
+            </Fragment>
+          ) : (
+            <Fragment>
+              <Link href="/login">
+                <a className="w-32 py-1 mr-4 leading-5 hallow blue button">
+                  Log in
+                </a>
+              </Link>
+              <Link href="/register">
+                <a className="w-32 py-1 leading-5 blue button">Sign Up</a>
+              </Link>
+            </Fragment>
+          ))}
       </div>
     </div>
   );

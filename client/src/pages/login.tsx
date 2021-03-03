@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 
 import InputGroup from "../components/InputGroup";
 //Context
-import { useAuthDispatch } from "../context/auth";
+import { useAuthDispatch, useAuthState } from "../context/auth";
 //Interfaces and Enums
 import { REDUCER_ENUM } from "../emums";
 
@@ -18,6 +18,9 @@ const Login = () => {
 
   const router = useRouter();
   const dispatch = useAuthDispatch();
+  const { authenticated } = useAuthState();
+
+  if (authenticated) router.push("/");
 
   const submitForm = async (event: FormEvent) => {
     event.preventDefault();
@@ -26,7 +29,7 @@ const Login = () => {
         password,
         username,
       });
-      dispatch({ type: REDUCER_ENUM.LOGIN, payload: res.data });
+      dispatch(REDUCER_ENUM.LOGIN, res.data);
 
       router.push("/");
     } catch (error) {

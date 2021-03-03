@@ -33,6 +33,7 @@ export interface IUser {
 export interface IState {
   authenticated: boolean;
   user: IUser | undefined;
+  loading: boolean;
 }
 
 export interface IAction {
