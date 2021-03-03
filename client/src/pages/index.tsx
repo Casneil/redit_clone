@@ -9,9 +9,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 //Interfaces
 import { IPosts } from "../interfaces";
 
-dayjs.extend(relativeTime);
-
-export default function Home() {
+const Home = () => {
   const [posts, setPosts] = useState<Array<IPosts>>([]);
 
   useEffect(() => {
@@ -23,6 +21,8 @@ export default function Home() {
         console.log(error);
       });
   }, []);
+
+  dayjs.extend(relativeTime);
 
   return (
     <div className="pt-12">
@@ -56,8 +56,8 @@ export default function Home() {
                       /r/{post.subName}
                     </a>
                   </Fragment>
-                  <p className="text-xs text-gray-600">
-                    <span className="mx-1 text-gray-500">•</span> Posted by
+                  <p className="text-xs text-gray-500">
+                    <span className="mx-1 text-gray-400">•</span> Posted by
                     <Link href={post.username}>
                       <a className="mx-1 hover:underline">{post.username}</a>
                     </Link>
@@ -75,17 +75,17 @@ export default function Home() {
                 <div className="flex">
                   <Link href={post.url}>
                     <a>
-                      <div className="px-1 py-1 mr-2 text-xs text-gray-400 rounded cursor-pointer hover:bg-gray-200">
+                      <div className="px-1 py-1 mr-1 text-xs text-gray-400 rounded cursor-pointer hover:bg-gray-200">
                         <i className="mr-1 fas fa-comment-alt fa-xs"></i>
                         <span className="font-bold">20 Comments</span>
                       </div>
                     </a>
                   </Link>
-                  <div className="px-1 py-1 mr-2 text-xs text-gray-400 rounded cursor-pointer hover:bg-gray-200">
+                  <div className="px-1 py-1 mr-1 text-xs text-gray-400 rounded cursor-pointer hover:bg-gray-200">
                     <i className="mr-1 fas fa-share fa-xs"></i>
                     <span className="font-bold">Share</span>
                   </div>
-                  <div className="px-1 py-1 mr-2 text-xs text-gray-400 rounded cursor-pointer hover:bg-gray-200">
+                  <div className="px-1 py-1 mr-1 text-xs text-gray-400 rounded cursor-pointer hover:bg-gray-200">
                     <i className="mr-1 fas fa-bookmark fa-xs"></i>
                     <span className="font-bold">Save</span>
                   </div>
@@ -98,4 +98,16 @@ export default function Home() {
       </div>
     </div>
   );
-}
+};
+
+// Server side rendering
+// export const getStaticProps: GetServerSideProps = async (context) => {
+//   try {
+//     const res = await Axios.get("/posts");
+//     return { props: { posts: res.data } };
+//   } catch (error) {
+//     return { props: { error: "Somethign went wrong" } };
+//   }
+// };
+
+export default Home;
