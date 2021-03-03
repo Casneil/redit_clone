@@ -1,24 +1,12 @@
-import { useEffect, useState } from "react";
-
+import useSWR from "swr";
 import Head from "next/head";
-import Axios from "axios";
-import PostCard from "../components/PostCard";
 
+import PostCard from "../components/PostCard";
 //Interfaces
 import { IPosts } from "../interfaces";
 
 const Home = () => {
-  const [posts, setPosts] = useState<Array<IPosts>>([]);
-
-  useEffect(() => {
-    Axios.get("./posts")
-      .then((res) => {
-        setPosts(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+  const { data: posts } = useSWR("/posts");
 
   return (
     <div className="pt-12">
@@ -28,7 +16,7 @@ const Home = () => {
       <div className="container flex pt-4">
         {/* Posts feeds */}
         <div className="w-160">
-          {posts.map((post: IPosts) => (
+          {posts?.map((post: IPosts) => (
             <PostCard post={post} key={post.identifier} />
           ))}
         </div>

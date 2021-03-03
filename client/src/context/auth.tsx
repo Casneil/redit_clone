@@ -42,7 +42,7 @@ const reducer = (state: IState, { type, payload }: IAction) => {
       };
 
     default:
-      throw new Error(`Unknown action type ${type}`);
+      return state;
   }
 };
 
