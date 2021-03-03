@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import useSWR from "swr";
 import Head from "next/head";
 
@@ -9,7 +10,7 @@ const Home = () => {
   const { data: posts } = useSWR("/posts");
 
   return (
-    <div className="pt-12">
+    <Fragment>
       <Head>
         <title>readit: the frontpage of the internet</title>
       </Head>
@@ -22,7 +23,7 @@ const Home = () => {
         </div>
         {/* Sidebar */}
       </div>
-    </div>
+    </Fragment>
   );
 };
 
