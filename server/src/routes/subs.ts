@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import { isEmpty } from "class-validator";
 import { getRepository } from "typeorm";
 import multer, { FileFilterCallback } from "multer";
@@ -68,6 +68,25 @@ const getSub = async (req: Request, res: Response) => {
   }
 };
 
+const ownsSub = async (req: Request, res: Response, next: NextFunction) => {
+  const user: User = res.locals.user;
+
+  try {
+    const sub = await Sub.findOneOrFail({
+      where: { name: req.params.name },
+    });
+
+    if (sub.username !== user.username) {
+      return res.status(403).json({ error: "You don't own this sub" });
+    }
+    res.locals.sub = sub;
+    return next();
+  } catch (error) {
+    return res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
+// Image upload
 const upload = multer({
   storage: multer.diskStorage({
     destination: "public/images",
@@ -80,7 +99,7 @@ const upload = multer({
     if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
       callback(null, true);
     } else {
-      callback(null, false);
+      callback(new Error("Image format not supported"));
     }
   },
 });
@@ -93,6 +112,13 @@ const router = Router();
 
 router.post("/", user, auth, createSub);
 router.get("/:name", user, getSub);
-router.post("/:name/image", user, auth, upload.single("file"), uploadSubImage);
+router.post(
+  "/:name/image",
+  user,
+  auth,
+  ownsSub,
+  upload.single("file"),
+  uploadSubImage
+);
 
 export default router;

@@ -31,6 +31,9 @@ export default class Sub extends Entity {
   @Column({ nullable: true })
   imageUrn: string;
 
+  @Column()
+  username: string;
+
   @Column({ nullable: true })
   bannerUrn: string;
 
