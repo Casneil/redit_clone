@@ -1,4 +1,4 @@
-import { Fragment, createRef, useEffect, useState } from "react";
+import { Fragment, createRef, useEffect, useState, ChangeEvent } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import Image from "next/image";
@@ -10,6 +10,7 @@ import { useAuthState } from "../../context/auth";
 
 import PostCard from "../../components/PostCard";
 import { IPost, ISub } from "../../interfaces";
+import Axios from "axios";
 
 const Sub = () => {
   const [ownSub, setOwnSub] = useState<boolean>(false);
@@ -20,16 +21,39 @@ const Sub = () => {
 
   const fileInputRef = createRef<HTMLInputElement>();
 
-  const { data: sub, error } = useSWR<ISub>(
+  const { data: sub, error, revalidate } = useSWR<ISub>(
     subName ? `/subs/${subName}` : null
   );
+
+  const openFileInput = (type: string) => {
+    if (!ownSub) return;
+    fileInputRef.current.name = type;
+    fileInputRef.current.click();
+  };
+
+  const uploadImage = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files[0];
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("type", fileInputRef.current.name);
+
+    try {
+      await Axios.post<ISub>(`/subs/${sub.name}/image`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      revalidate();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     if (!sub) return;
     setOwnSub(authenticated && user.username === sub.username);
   }, [sub]);
 
-  let postMarkup;
+  let postMarkup: any;
   if (error) router.push("/");
 
   if (!sub) {
@@ -49,7 +73,12 @@ const Sub = () => {
       </Head>
       {sub && (
         <Fragment>
-          <input type="file" hidden={true} ref={fileInputRef} />
+          <input
+            type="file"
+            hidden={true}
+            ref={fileInputRef}
+            onChange={uploadImage}
+          />
           <Fragment>
             {/* Sub info & images */}
             <div>
@@ -58,6 +87,7 @@ const Sub = () => {
                 className={classNames("bg-blue-500", {
                   "cursor-pointer": ownSub,
                 })}
+                onClick={() => openFileInput("banner")}
               >
                 {sub.bannerUrl ? (
                   <div
@@ -86,6 +116,7 @@ const Sub = () => {
                   >
                     <Image
                       src={sub.imageUrl}
+                      onClick={() => openFileInput("image")}
                       alt="Sub"
                       width={70}
                       height={70}
