@@ -61,6 +61,14 @@ export default class Post extends Entity {
     return `/r/${this.subName}/${this.identifier}/${this.slug}`;
   }
 
+  @Expose() get commentCount(): number {
+    return this.comments?.length;
+  }
+
+  @Expose() get voteScore(): number {
+    return this.votes?.reduce((prev, curr) => prev + (curr.value || 0), 0);
+  }
+
   @BeforeInsert()
   makeIdAndSlug() {
     this.identifier = makeId(7);
