@@ -6,6 +6,10 @@ import Axios from "axios";
 import { useRouter } from "next/router";
 
 import InputGroup from "../components/InputGroup";
+//Context
+import { useAuthDispatch } from "../context/auth";
+//Interfaces and Enums
+import { REDUCER_ENUM } from "../emums";
 
 const Login = () => {
   const [username, setUserName] = useState<string>();
@@ -13,14 +17,17 @@ const Login = () => {
   const [errors, setErrors] = useState<any>({});
 
   const router = useRouter();
+  const dispatch = useAuthDispatch();
 
   const submitForm = async (event: FormEvent) => {
     event.preventDefault();
     try {
-      await Axios.post("/auth/login", {
+      const res = await Axios.post("/auth/login", {
         password,
         username,
       });
+      dispatch({ type: REDUCER_ENUM.LOGIN, payload: res.data });
+
       router.push("/");
     } catch (error) {
       setErrors(error.response.data);
