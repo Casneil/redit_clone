@@ -4,6 +4,7 @@ import { getRepository } from "typeorm";
 import multer, { FileFilterCallback } from "multer";
 import { makeId } from "../helpers/helpers";
 import path from "path";
+import fs from "fs";
 
 import Sub from "../entities/Sub";
 import User from "../entities/User";
@@ -109,16 +110,24 @@ const uploadSubImage = async (req: Request, res: Response) => {
   try {
     const type = req.body.type;
     if (type !== "image" && type !== "banner") {
+      fs.unlinkSync(req.file.path);
       return res.status(400).json({ error: "Invalid type" });
     }
 
+    let oldImageUrn: string = "";
+
     if (type === "image") {
       sub.imageUrn = req.file.filename;
+      oldImageUrn = sub.imageUrn || "";
     } else if (type === "banner") {
       sub.bannerUrn = req.file.filename;
+      oldImageUrn = sub.bannerUrn || "";
     }
 
     await sub.save();
+    if (oldImageUrn !== "") {
+      fs.unlinkSync(`public\\images\\${oldImageUrn}`);
+    }
     return res.json(sub);
   } catch (error) {
     return res.status(500).json({ error: "Something went wrong" });
