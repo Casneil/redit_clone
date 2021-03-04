@@ -50,6 +50,7 @@ export interface ISub {
   bannerUrn: string;
   username: string;
   posts: IPost[];
+  postCount?: number;
   createdAt: string;
   updatedAt: string;
   // Virtual fields
