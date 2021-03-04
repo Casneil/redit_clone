@@ -9,6 +9,8 @@ import classNames from "classnames";
 import { useAuthState } from "../../context/auth";
 
 import PostCard from "../../components/PostCard";
+import Sidebar from "../../components/Sidebar";
+//Tnterfaces
 import { IPost, ISub } from "../../interfaces";
 import Axios from "axios";
 
@@ -139,6 +141,7 @@ const Sub = () => {
             {/* Posts & Sidebar */}
             <div className="container flex pt-5">
               <div className="w-160">{postMarkup}</div>
+              <Sidebar sub={sub} />
             </div>
           </Fragment>
         </Fragment>
