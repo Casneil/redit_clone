@@ -31,7 +31,7 @@ const Login = () => {
       });
       dispatch(REDUCER_ENUM.LOGIN, res.data);
 
-      router.push("/");
+      router.back();
     } catch (error) {
       setErrors(error.response.data);
     }

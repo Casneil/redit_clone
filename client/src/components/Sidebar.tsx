@@ -1,4 +1,3 @@
-import React from "react";
 import Link from "next/link";
 import dayjs from "dayjs";
 
@@ -20,11 +19,11 @@ const Sidebar = ({ sub }: { sub: ISub }) => {
           <p className="mb-3 text-md">{sub.description}</p>
           <div className="flex mb-3 text-sm font-medium">
             <div className="w-1/2">
-              <p>5.2k</p>
+              <p>6.2k</p>
               <p>members</p>
             </div>
             <div className="w-1/2">
-              <p>150</p>
+              <p>203</p>
               <p>online</p>
             </div>
           </div>

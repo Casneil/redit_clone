@@ -13,6 +13,7 @@ export interface IPost {
   body?: string;
   subName: string;
   slug: string;
+  sub?: ISub;
   username: string;
   createdAt: string;
   updatedAt: string;

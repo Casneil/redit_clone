@@ -38,7 +38,7 @@ const PostCard = ({
 }: PostCardTypes) => {
   dayjs.extend(relativeTime);
 
-  const handleVote = async (value) => {
+  const handleVote = async (value: number) => {
     try {
       const res = await Axios.post("/misc/vote", {
         identifier,
