@@ -6,19 +6,13 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import Axios from "axios";
 import classNames from "classnames";
 
+import ActionButton from "./ActionButton";
+
 // Interfaces
 import { IPost } from "../interfaces";
 
 type PostCardTypes = {
   post: IPost;
-};
-
-const ActionButtom = ({ children }) => {
-  return (
-    <div className="px-1 py-1 mr-1 text-xs text-gray-400 rounded cursor-pointer hover:bg-gray-200">
-      {children}
-    </div>
-  );
 };
 
 const PostCard = ({
@@ -114,20 +108,20 @@ const PostCard = ({
         <div className="flex">
           <Link href={url}>
             <a>
-              <ActionButtom>
+              <ActionButton>
                 <i className="mr-1 fas fa-comment-alt fa-xs"></i>
                 <span className="font-bold">{commentCount}</span>
-              </ActionButtom>
+              </ActionButton>
             </a>
           </Link>
-          <ActionButtom>
+          <ActionButton>
             <i className="mr-1 fas fa-share fa-xs"></i>
             <span className="font-bold">Share</span>
-          </ActionButtom>
-          <ActionButtom>
+          </ActionButton>
+          <ActionButton>
             <i className="mr-1 fas fa-bookmark fa-xs"></i>
             <span className="font-bold">Save</span>
-          </ActionButtom>
+          </ActionButton>
         </div>
       </div>
     </div>

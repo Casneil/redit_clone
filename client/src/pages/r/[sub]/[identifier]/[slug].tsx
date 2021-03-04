@@ -10,6 +10,8 @@ import relativeTime from "dayjs/plugin/relativeTime";
 
 import classNames from "classnames";
 
+import ActionButton from "../../../../components/ActionButton";
+
 import Sidebar from "../../../../components/Sidebar";
 //Interfaces
 import { IPost } from "../../../../interfaces";
@@ -117,6 +119,25 @@ const PostPage = () => {
                   <h1 className="my-1 text-xl font-medium">{post.title}</h1>
                   {/* Post body */}
                   <p className="my-3 text-sm">{post.body}</p>
+                  {/* Action buttons */}
+                  <div className="flex">
+                    <Link href={post.url}>
+                      <a>
+                        <ActionButton>
+                          <i className="mr-1 fas fa-comment-alt fa-xs"></i>
+                          <span className="font-bold">{post.commentCount}</span>
+                        </ActionButton>
+                      </a>
+                    </Link>
+                    <ActionButton>
+                      <i className="mr-1 fas fa-share fa-xs"></i>
+                      <span className="font-bold">Share</span>
+                    </ActionButton>
+                    <ActionButton>
+                      <i className="mr-1 fas fa-bookmark fa-xs"></i>
+                      <span className="font-bold">Save</span>
+                    </ActionButton>
+                  </div>
                 </div>
               </div>
             )}
