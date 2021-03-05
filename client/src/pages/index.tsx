@@ -7,10 +7,14 @@ import Link from "next/link";
 import PostCard from "../components/PostCard";
 //Interfaces
 import { IPost, ISub } from "../interfaces";
+//Context
+import { useAuthState } from "../context/auth";
 
 const Home = () => {
   const { data: posts } = useSWR<Array<IPost>>("/posts");
   const { data: topSubs } = useSWR<Array<ISub>>("/misc/top-subs");
+
+  const { authenticated } = useAuthState();
 
   return (
     <Fragment>
@@ -59,6 +63,16 @@ const Home = () => {
                 </div>
               ))}
             </div>
+            {/* Create Sub section */}
+            {authenticated && (
+              <div className="p-4 border-t-2">
+                <Link href="/subs/create">
+                  <a className="w-full px-2 py-1 blue button">
+                    Create Community
+                  </a>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>
