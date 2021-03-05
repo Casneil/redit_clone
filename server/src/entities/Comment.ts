@@ -13,8 +13,8 @@ import Post from "./Post";
 import User from "./User";
 import Vote from "./Vote";
 
+import { Exclude, Expose } from "class-transformer";
 import { makeId } from "../helpers/helpers";
-import { Exclude } from "class-transformer";
 
 @TOEntity("comments")
 export default class Comment extends Entity {
@@ -43,6 +43,10 @@ export default class Comment extends Entity {
   @Exclude()
   @OneToMany(() => Vote, (vote) => vote.comment)
   votes: Vote[];
+
+  @Expose() get voteScore(): number {
+    return this.votes?.reduce((prev, curr) => prev + (curr.value || 0), 0);
+  }
 
   protected userVote: number;
   setUserVote(user: User) {
