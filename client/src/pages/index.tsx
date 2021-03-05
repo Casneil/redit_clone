@@ -15,7 +15,7 @@ const Home = () => {
   return (
     <Fragment>
       <Head>
-        <title>readit: the frontpage of the internet</title>
+        <title>readdit: the frontpage of the internet</title>
       </Head>
       <div className="container flex pt-4">
         {/* Posts feeds */}

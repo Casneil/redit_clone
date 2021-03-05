@@ -30,7 +30,7 @@ const Navbar: React.FC = () => {
           </a>
         </Link>
         <span className="text-2xl font-semibold">
-          <Link href="/">readit</Link>
+          <Link href="/">readdit</Link>
         </span>
       </div>
 
