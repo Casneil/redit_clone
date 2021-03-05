@@ -7,6 +7,7 @@ import PostCard from "../../components/PostCard";
 
 //Interfaces
 import { IComment, IPost } from "../../interfaces";
+import dayjs from "dayjs";
 
 const User = () => {
   const router = useRouter();
@@ -22,6 +23,7 @@ const User = () => {
       </Head>
       {data && (
         <div className="container flex pt-5">
+          {/* Main content */}
           <div className="w-160">
             {data.submissions.map((submission: any) => {
               if (submission.type === "Post") {
@@ -34,19 +36,17 @@ const User = () => {
                     key={comment.identifier}
                     className="flex my-4 bg-white rounded"
                   >
-                    <div className="flex-shrink-0 w-10 py-4 text-center rounded-l">
-                      <i className="mr-1 text-gray-500 fas fa-comment-alt fa-xs"></i>
+                    <div className="flex-shrink-0 w-10 py-4 text-center bg-gray-200 rounded-l">
+                      <i className="text-gray-500 fas fa-comment-alt fa-xs"></i>
                     </div>
                     <div className="w-full p-2">
-                      <p className="mb-2 text-xs text gray-500">
-                        <Link href={`/u/${comment.username}`}>
-                          <a className="text-blue-500 hover:underline">
-                            {comment.username}
-                          </a>
-                        </Link>
-                        <span>commented on</span>
+                      <p className="mb-2 text-xs text-gray-500">
+                        <span className="text-blue-500">
+                          {comment.username}
+                        </span>
+                        <span className="mx-1">commented on</span>
                         <Link href={comment.post.url}>
-                          <a className="cursor-pointer hover:underline">
+                          <a className="font-semibold cursor-pointer hover:underline">
                             {comment.post.title}
                           </a>
                         </Link>
@@ -64,6 +64,25 @@ const User = () => {
                 );
               }
             })}
+          </div>
+          {/* Sidebar */}
+          <div className="ml-6 w-80">
+            <div className="bg-white rounded">
+              <div className="p-2 bg-blue-500 rounded-t">
+                <img
+                  src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
+                  alt="user profile"
+                  className="w-16 h-16 mx-auto border-white rounded-full"
+                />
+              </div>
+              <div className="p-2 text-center">
+                <h1 className="mb-3 text-xl">{data.user.username}</h1>
+                <hr />
+                <p className="mt-3">
+                  Joined {dayjs(data.user.createdAt).format("MMM YYYY")}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       )}
