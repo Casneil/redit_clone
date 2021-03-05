@@ -12,8 +12,8 @@ import { useAuthDispatch, useAuthState } from "../context/auth";
 import { REDUCER_ENUM } from "../emums";
 
 const Login = () => {
-  const [username, setUserName] = useState<string>();
-  const [password, setPassword] = useState<string>();
+  const [username, setUserName] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [errors, setErrors] = useState<any>({});
 
   const router = useRouter();

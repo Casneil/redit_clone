@@ -20,8 +20,9 @@ const createSub = async (req: Request, res: Response) => {
 
   try {
     let errors: any = {};
-    if (isEmpty(name)) errors.name = "Name must not be empty";
-    if (isEmpty(title)) errors.name = "Title must not be empty";
+    if (isEmpty(name)) errors.name = "Must not be empty";
+    if (isEmpty(title)) errors.title = "Must not be empty";
+    if (isEmpty(description)) errors.description = "Must not be empty";
 
     const sub = await getRepository(Sub)
       .createQueryBuilder("sub")

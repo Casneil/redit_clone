@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
 import Axios from "axios";
 
@@ -11,6 +12,18 @@ const create = () => {
   const [description, setDescription] = useState<string>("");
 
   const [errors, setErrors] = useState<Partial<any>>({});
+  const router = useRouter();
+
+  const onSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    try {
+      const res = await Axios.post("/subs", { name, title, description });
+      router.push(`/r/${res.data.name}`);
+    } catch (error) {
+      console.log(error);
+      setErrors(error.response.data);
+    }
+  };
 
   return (
     <div className="flex bg-white">
@@ -26,7 +39,7 @@ const create = () => {
           <h1 className="mb-2 text-lg font-medium">Create a Communit</h1>
           <hr />
           {/* Form */}
-          <form>
+          <form onSubmit={onSubmit}>
             {/* Name */}
             <div className="my-6">
               <p className="font-medium">Name</p>
@@ -77,14 +90,28 @@ const create = () => {
                 {errors.description}
               </small>
             </div>
+            {/* Submit button */}
+            <div className="flex justify-end">
+              <button
+                className="px-4 py-1 text-sm font-semibold blue button"
+                type="submit"
+                disabled={
+                  name.trim().length < 2 ||
+                  title.trim().length < 2 ||
+                  !Object.keys(errors)
+                    ? true
+                    : false
+                }
+              >
+                Create Community
+              </button>
+            </div>
           </form>
         </div>
       </div>
     </div>
   );
 };
-
-export default create;
 
 export const getServerSiteProps: GetServerSideProps = async ({ req, res }) => {
   try {
@@ -97,3 +124,5 @@ export const getServerSiteProps: GetServerSideProps = async ({ req, res }) => {
     res.writeHead(307, { Location: "/login" }).end();
   }
 };
+
+export default create;
