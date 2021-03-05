@@ -9,8 +9,8 @@ import PostCard from "../components/PostCard";
 import { IPost, ISub } from "../interfaces";
 
 const Home = () => {
-  const { data: posts } = useSWR("/posts");
-  const { data: topSubs } = useSWR("/misc/top-subs");
+  const { data: posts } = useSWR<Array<IPost>>("/posts");
+  const { data: topSubs } = useSWR<Array<ISub>>("/misc/top-subs");
 
   return (
     <Fragment>
@@ -33,19 +33,21 @@ const Home = () => {
               </p>
             </div>
             <div>
-              {topSubs?.map((sub: ISub) => (
+              {topSubs?.map((sub) => (
                 <div
                   key={sub.name}
                   className="flex items-center px-4 py-2 text-xs border-b"
                 >
                   <div className="w-8 h-8 mr-2 overflow-hidden rounded-full cursor-pointer">
                     <Link href={`/r/${sub.name}`}>
-                      <Image
-                        src={sub.imageUrl}
-                        alt="Sub"
-                        width={(8 * 16) / 4}
-                        height={(8 * 16) / 4}
-                      />
+                      <a>
+                        <Image
+                          src={sub.imageUrl}
+                          alt="Sub"
+                          width={(8 * 16) / 4}
+                          height={(8 * 16) / 4}
+                        />
+                      </a>
                     </Link>
                   </div>
                   <Link href={`/r/${sub.name}`}>
