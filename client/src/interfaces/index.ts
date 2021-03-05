@@ -58,3 +58,14 @@ export interface ISub {
   imageUrl: string;
   bannerUrl: string;
 }
+
+export interface IComment {
+  identifier: string;
+  body?: string;
+  username: string;
+  createdAt: string;
+  updatedAt: string;
+  // Virtual fields
+  voteScore?: number;
+  userVote?: number;
+}
