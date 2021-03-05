@@ -1,3 +1,4 @@
+import { FormEvent, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
@@ -19,15 +20,16 @@ import { IPost, IComment } from "../../../../interfaces";
 import { useAuthState } from "../../../../context/auth";
 
 const PostPage = () => {
+  const [newComment, setNewComment] = useState<string>();
   const router = useRouter();
-  const { authenticated } = useAuthState();
+  const { authenticated, user } = useAuthState();
   const { identifier, sub, slug } = router.query;
 
   const { data: post, error } = useSWR<IPost>(
     identifier && slug ? `/posts/${identifier}/${slug}` : null
   );
 
-  const { data: comments } = useSWR<Array<IComment>>(
+  const { data: comments, revalidate } = useSWR<Array<IComment>>(
     identifier && slug ? `/posts/${identifier}/${slug}/comments` : null
   );
 
@@ -44,11 +46,24 @@ const PostPage = () => {
     )
       value = 0;
     try {
-      const res = await Axios.post("/misc/vote", {
+      await Axios.post("/misc/vote", {
         identifier,
         slug,
         commentIdentifier: comment?.identifier,
         value,
+      });
+      revalidate();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const submitComment = async (event: FormEvent) => {
+    event.preventDefault();
+    if (newComment.trim() === "") return;
+    try {
+      await Axios.post(`/post/${post.identifier}/${post.slug}/comments`, {
+        body: newComment,
       });
     } catch (error) {
       console.log(error);
@@ -86,7 +101,7 @@ const PostPage = () => {
               <Fragment>
                 <div className="flex">
                   {/* Vote section */}
-                  <div className="w-10 py-3 text-center rounded-l">
+                  <div className="flex-shrink-0 w-10 py-2 text-center rounded-l">
                     {/* Upvote */}
                     <div
                       className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"
@@ -111,7 +126,7 @@ const PostPage = () => {
                       ></i>
                     </div>
                   </div>
-                  <div className="p-2">
+                  <div className="py-2 pr-2">
                     <div className="flex items-center">
                       <p className="text-xs text-gray-500">
                         Posted by
@@ -154,10 +169,57 @@ const PostPage = () => {
                     </div>
                   </div>
                 </div>
-                /* Comments */
+                {/* Comments input */}
+                <div className="pl-10 pr-6 mb-4">
+                  {authenticated ? (
+                    <div>
+                      <p className="mb-1 text-xs">
+                        Comment as
+                        <Link href={`/u/${user.username}`}>
+                          <a className="ml-1 font-semibold text-blue-500">
+                            {user.username}
+                          </a>
+                        </Link>
+                      </p>
+                      <form onSubmit={submitComment}>
+                        <textarea
+                          className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-gray-400"
+                          onChange={(event) =>
+                            setNewComment(event.target.value)
+                          }
+                          value={newComment}
+                        ></textarea>
+                        <div className="flex justify-end">
+                          <button className="px-3 py-1 blue button">
+                            Comment
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between px-2 py-4 border border-gray-200 rounded">
+                      <p className="font-semibold text-gray-400">
+                        Log in or Sign Up to leave a comment.
+                      </p>
+                      <div>
+                        <Link href="/login">
+                          <a className="px-4 py-1 mr-4 hallow blue button">
+                            Log In
+                          </a>
+                        </Link>
+
+                        <Link href="/register">
+                          <a className="px-4 py-1 blue button">Register</a>
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <hr />
+                {/* Comments  */}
                 {comments?.map((comment: IComment) => (
                   <div className="flex">
-                    <div className="w-10 py-3 text-center rounded-l">
+                    <div className="flex-shrink-0 w-10 py-2 text-center rounded-l">
                       {/* Upvote */}
                       <div
                         className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"
@@ -181,6 +243,21 @@ const PostPage = () => {
                           })}
                         ></i>
                       </div>
+                    </div>
+                    <div className="py-2 pr-2">
+                      <p className="mb-1 text-xs leading-none">
+                        <Link href={`/u/${comment.username}`}>
+                          <a className="mr-1 font-bold hover:underline">
+                            {comment.username}
+                          </a>
+                        </Link>
+                        <span className="text-gray-600">
+                          {`${comment.voteScore} points • ${dayjs(
+                            comment.createdAt
+                          ).fromNow()}`}
+                        </span>
+                      </p>
+                      <p>{comment.body}</p>
                     </div>
                   </div>
                 ))}
