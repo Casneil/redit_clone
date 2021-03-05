@@ -31,6 +31,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       value={{
         fetcher: (url) => fetcher(url),
         dedupingInterval: 4000,
+        revalidateOnFocus: true,
       }}
     >
       <AuthProvider>

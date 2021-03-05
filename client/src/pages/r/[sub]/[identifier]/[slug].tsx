@@ -20,7 +20,7 @@ import { IPost, IComment } from "../../../../interfaces";
 import { useAuthState } from "../../../../context/auth";
 
 const PostPage = () => {
-  const [newComment, setNewComment] = useState<string>();
+  const [newComment, setNewComment] = useState<string>("");
   const router = useRouter();
   const { authenticated, user } = useAuthState();
   const { identifier, sub, slug } = router.query;
@@ -62,9 +62,11 @@ const PostPage = () => {
     event.preventDefault();
     if (newComment.trim() === "") return;
     try {
-      await Axios.post(`/post/${post.identifier}/${post.slug}/comments`, {
+      await Axios.post(`/posts/${post.identifier}/${post.slug}/comments`, {
         body: newComment,
       });
+      setNewComment("");
+      revalidate();
     } catch (error) {
       console.log(error);
     }
@@ -190,7 +192,10 @@ const PostPage = () => {
                           value={newComment}
                         ></textarea>
                         <div className="flex justify-end">
-                          <button className="px-3 py-1 blue button">
+                          <button
+                            className="px-3 py-1 blue button"
+                            disabled={newComment.trim().length < 2}
+                          >
                             Comment
                           </button>
                         </div>
