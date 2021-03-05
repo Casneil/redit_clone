@@ -8,6 +8,7 @@ import authRoutes from "./routes/auth";
 import postsRoutes from "./routes/posts";
 import subRoutes from "./routes/subs";
 import miscRoutes from "./routes/misc";
+import userRoutes from "./routes/users";
 //Middleware
 import trim from "./middleware/trim";
 import dotenv from "dotenv";
@@ -35,6 +36,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/posts", postsRoutes);
 app.use("/api/subs", subRoutes);
 app.use("/api/misc", miscRoutes);
+app.use("/api/users", userRoutes);
 
 app.listen(process.env.PORT, async () => {
   console.log(`Running at http:localhost:${process.env.PORT}`);

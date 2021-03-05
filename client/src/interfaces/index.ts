@@ -65,6 +65,7 @@ export interface IComment {
   username: string;
   createdAt: string;
   updatedAt: string;
+  post?: IPost;
   // Virtual fields
   voteScore?: number;
   userVote?: number;
