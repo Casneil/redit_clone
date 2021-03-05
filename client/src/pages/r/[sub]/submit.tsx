@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { GetServerSideProps } from "next";
 import useSWR from "swr";
 import Axios from "axios";
 
@@ -83,6 +84,18 @@ const Submit = () => {
       {sub && <SideBar sub={sub} />}
     </div>
   );
+};
+
+export const getServerSiteProps: GetServerSideProps = async ({ req, res }) => {
+  try {
+    const cookie = req.headers.cookie;
+    if (!cookie) throw new Error("Missing auth token cookie");
+    await Axios.get("/auth/me", { headers: { cookie } });
+
+    return { props: {} };
+  } catch (error) {
+    res.writeHead(307, { Location: "/login" }).end();
+  }
 };
 
 export default Submit;
