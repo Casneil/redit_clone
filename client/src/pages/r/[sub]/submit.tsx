@@ -5,6 +5,8 @@ import useSWR from "swr";
 import Axios from "axios";
 
 import SideBar from "../../../components/Sidebar";
+//Interfaces
+import { IPost } from "../../../interfaces";
 
 const Submit = () => {
   const [title, setTitle] = useState<string>("");
@@ -12,9 +14,7 @@ const Submit = () => {
 
   const router = useRouter();
   const { sub: subName } = router.query;
-  const { data: sub, error, revalidate } = useSWR(
-    subName ? `/subs/${subName}` : null
-  );
+  const { data: sub, error } = useSWR(subName ? `/subs/${subName}` : null);
   if (error) router.push("/");
 
   const submitPost = async (event: FormEvent) => {
@@ -22,15 +22,17 @@ const Submit = () => {
     if (title.trim() === "") return;
 
     try {
-      await Axios.post("/posts", {
+      const { data: post } = await Axios.post<IPost>("/posts", {
         title: title.trim(),
         body,
-        sub: sub.subName,
+        sub: sub.name,
       });
       setTitle("");
       setBody("");
-      revalidate();
-    } catch (error) {}
+      router.push(`/r/${sub.name}/${post.identifier}/${post.slug}`);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -64,6 +66,7 @@ const Submit = () => {
               value={body}
               placeholder="Text (optional)"
               rows={4}
+              onChange={(event) => setBody(event.target.value)}
             ></textarea>
             <div className="flex justify-end">
               <button
