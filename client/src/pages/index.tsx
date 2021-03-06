@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useState, useEffect } from "react";
 import useSWR from "swr";
 import Head from "next/head";
 import Image from "next/image";
@@ -11,10 +11,35 @@ import { IPost, ISub } from "../interfaces";
 import { useAuthState } from "../context/auth";
 
 const Home = () => {
+  const [observedPost, setObservedPost] = useState<string>("");
+
   const { data: posts } = useSWR<Array<IPost>>("/posts");
   const { data: topSubs } = useSWR<Array<ISub>>("/misc/top-subs");
 
   const { authenticated } = useAuthState();
+
+  useEffect(() => {
+    if (!posts || posts.length === 0) return;
+    const id = posts[posts.length - 1].identifier;
+    if (id !== observedPost) {
+      setObservedPost(id);
+      observeElement(document.getElementById(id));
+    }
+  }, [posts]);
+
+  const observeElement = (element: HTMLElement) => {
+    if (!element) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting === true) {
+          console.log("reached bottom of post");
+          observer.unobserve(element);
+        }
+      },
+      { threshold: 1 }
+    );
+    observer.observe(element);
+  };
 
   return (
     <Fragment>

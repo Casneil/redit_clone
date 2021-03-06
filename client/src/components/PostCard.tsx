@@ -45,7 +45,7 @@ const PostCard = ({
   };
 
   return (
-    <div className="flex mb-4 bg-white rounded">
+    <div className="flex mb-4 bg-white rounded" id={identifier}>
       {/* Vote section */}
       <div className="w-10 py-3 text-center bg-gray-200 rounded-l">
         {/* Upvote */}
