@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
@@ -21,6 +21,8 @@ import { useAuthState } from "../../../../context/auth";
 
 const PostPage = () => {
   const [newComment, setNewComment] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+
   const router = useRouter();
   const { authenticated, user } = useAuthState();
   const { identifier, sub, slug } = router.query;
@@ -72,10 +74,22 @@ const PostPage = () => {
     }
   };
 
+  useEffect(() => {
+    if (!post) return;
+    let desc = post.body || post.title;
+    desc = desc.substring(0, 157).concat("...");
+    setDescription(desc);
+  }, [post]);
+
   return (
     <Fragment>
       <Head>
         <title>{post?.title}</title>
+        <meta name="description" content={description} />
+        <meta property="og:description" content={description} />
+        <meta property="og:title" content={post?.title} />
+        <meta property="twitter:description" content={description} />
+        <meta property="twitter:title" content={post?.title} />
       </Head>
       <Link href={`/r/${sub}`}>
         <a>

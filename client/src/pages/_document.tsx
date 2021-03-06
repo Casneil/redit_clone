@@ -18,6 +18,18 @@ class MyDocument extends Document {
         <Head>
           <title>Readdit</title>
           <link rel="icon" type="image/svg+xml" href="/images/logo.svg" />
+          <meta property="og:site_name" content="readdit" />
+          {/* <meta property="twitter:site" content="@readdit" /> */}
+          <meta property="twitter:card" content="summary" />
+          <meta property="og:type" content="website" />
+          <meta
+            property="og:image"
+            content={`${process.env.NEXT_CLIENT_SERVER_BASE_URL}/readdit.svg`}
+          />
+          <meta
+            property="twitter:image"
+            content={`${process.env.NEXT_CLIENT_SERVER_BASE_URL}/readdit.svg`}
+          />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link
             href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@100;200;300;400;500;600;700&display=swap"
