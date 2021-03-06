@@ -2,17 +2,20 @@ import React, { Fragment } from "react";
 
 import dayjs from "dayjs";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Axios from "axios";
 import classNames from "classnames";
 
 import ActionButton from "./ActionButton";
-
+//Context
+import { useAuthState } from "../context/auth";
 // Interfaces
 import { IPost } from "../interfaces";
 
 type PostCardTypes = {
   post: IPost;
+  revalidate?: Function;
 };
 
 const PostCard = ({
@@ -29,16 +32,23 @@ const PostCard = ({
     slug,
     userVote,
   },
+  revalidate,
 }: PostCardTypes) => {
+  const { authenticated } = useAuthState();
+
+  const router = useRouter();
   dayjs.extend(relativeTime);
 
   const handleVote = async (value: number) => {
+    if (!authenticated) router.push("/login");
+    if (value === userVote) value = 0;
     try {
-      const res = await Axios.post("/misc/vote", {
+      await Axios.post("/misc/vote", {
         identifier,
         slug,
         value,
       });
+      if (revalidate) revalidate();
     } catch (error) {
       console.log(error);
     }

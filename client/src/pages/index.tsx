@@ -1,5 +1,5 @@
 import { Fragment, useState, useEffect } from "react";
-import useSWR from "swr";
+import useSWR, { useSWRInfinite } from "swr";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,10 +13,21 @@ import { useAuthState } from "../context/auth";
 const Home = () => {
   const [observedPost, setObservedPost] = useState<string>("");
 
-  const { data: posts } = useSWR<Array<IPost>>("/posts");
   const { data: topSubs } = useSWR<Array<ISub>>("/misc/top-subs");
 
   const { authenticated } = useAuthState();
+
+  const {
+    data,
+    error,
+    mutate,
+    size: page,
+    setSize: setPage,
+    isValidating,
+    revalidate,
+  } = useSWRInfinite<Array<IPost>>((index) => `/posts?page=${index}`);
+
+  const posts: Array<IPost> = data ? [].concat(...data) : [];
 
   useEffect(() => {
     if (!posts || posts.length === 0) return;
@@ -32,7 +43,7 @@ const Home = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting === true) {
-          console.log("reached bottom of post");
+          setPage(page + 1);
           observer.unobserve(element);
         }
       },
@@ -49,9 +60,17 @@ const Home = () => {
       <div className="container flex pt-4">
         {/* Posts feeds */}
         <div className="w-full md:w-160 sm:px-4 md:p-0">
+          {isValidating && <p className="text-lg text-center">Loading...</p>}
           {posts?.map((post: IPost) => (
-            <PostCard post={post} key={post.identifier} />
+            <PostCard
+              post={post}
+              key={post.identifier}
+              revalidate={revalidate}
+            />
           ))}
+          {isValidating && posts.length > 0 && (
+            <p className="text-lg text-center">Loading more posts...</p>
+          )}
         </div>
         {/* Sidebar */}
         <div className="hidden ml-6 md:block w-80">
