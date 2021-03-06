@@ -20,7 +20,7 @@ const Home = () => {
   const {
     data,
     error,
-    mutate,
+
     size: page,
     setSize: setPage,
     isValidating,
@@ -28,6 +28,7 @@ const Home = () => {
   } = useSWRInfinite<Array<IPost>>((index) => `/posts?page=${index}`);
 
   const posts: Array<IPost> = data ? [].concat(...data) : [];
+  const isLoadingInitialData = !data && !error;
 
   useEffect(() => {
     if (!posts || posts.length === 0) return;
@@ -60,7 +61,9 @@ const Home = () => {
       <div className="container flex pt-4">
         {/* Posts feeds */}
         <div className="w-full md:w-160 sm:px-4 md:p-0">
-          {isValidating && <p className="text-lg text-center">Loading...</p>}
+          {isLoadingInitialData && (
+            <p className="text-lg text-center">Loading...</p>
+          )}
           {posts?.map((post: IPost) => (
             <PostCard
               post={post}

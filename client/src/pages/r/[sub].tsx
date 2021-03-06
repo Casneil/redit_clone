@@ -64,7 +64,7 @@ const Sub = () => {
     postMarkup = <p className="text-lg text-center">No posts found</p>;
   } else {
     postMarkup = sub.posts.map((post: IPost) => (
-      <PostCard key={post.identifier} post={post} />
+      <PostCard key={post.identifier} post={post} revalidate={revalidate} />
     ));
   }
 

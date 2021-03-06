@@ -31,12 +31,14 @@ const PostCard = ({
     createdAt,
     slug,
     userVote,
+    sub,
   },
   revalidate,
 }: PostCardTypes) => {
   const { authenticated } = useAuthState();
 
   const router = useRouter();
+  const isInSubPage = router.pathname === "/r/[sub]"; //e.g.: /r/reactjs
   dayjs.extend(relativeTime);
 
   const handleVote = async (value: number) => {
@@ -85,22 +87,24 @@ const PostCard = ({
       {/* Post data section */}
       <div className="w-full p-2">
         <div className="flex items-center">
-          <Fragment>
-            <Link href={`/r/${subName}`}>
-              <img
-                src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
-                className="w-6 h-6 mr-1 rounded-full cursor-pointer"
-              />
-            </Link>
-            <a
-              href={`/r/${subName}`}
-              className="text-xs font-bold hover:underline"
-            >
-              /r/{subName}
-            </a>
-          </Fragment>
+          {!isInSubPage && (
+            <Fragment>
+              <Link href={`/r/${subName}`}>
+                <img
+                  src={sub?.imageUrl}
+                  className="w-6 h-6 mr-1 rounded-full cursor-pointer"
+                />
+              </Link>
+              <a
+                href={`/r/${subName}`}
+                className="text-xs font-bold hover:underline"
+              >
+                /r/{subName}
+              </a>
+              <span className="mx-1 text-gray-400">•</span> Posted by
+            </Fragment>
+          )}
           <p className="text-xs text-gray-500">
-            <span className="mx-1 text-gray-400">•</span> Posted by
             <Link href={username}>
               <a className="mx-1 hover:underline">{username}</a>
             </Link>
