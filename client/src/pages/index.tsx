@@ -17,6 +17,10 @@ const Home = () => {
 
   const { authenticated } = useAuthState();
 
+  const description =
+    "This is a clone of the official Reddit community website";
+  const title = "readdit: the front page of the internet";
+
   const {
     data,
     error,
@@ -57,6 +61,11 @@ const Home = () => {
     <Fragment>
       <Head>
         <title>readdit: the frontpage of the internet</title>
+        <meta name="description" content={description} />
+        <meta property="og:description" content={description} />
+        <meta property="og:title" content={title} />
+        <meta property="twitter:description" content={description} />
+        <meta property="twitter:title" content={title} />
       </Head>
       <div className="container flex pt-4">
         {/* Posts feeds */}
